@@ -1,4 +1,4 @@
-# TenForce QA Automation Project
+# TenForce QA Automation Project - Selenium
 
 This repository contains a professional Selenium-based automation suite for the TenForce Career page user journey. The project is designed to be resilient, scalable, and easy to maintain.
 
