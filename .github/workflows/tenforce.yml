@@ -1,0 +1,17 @@
+name: Python application
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        pip install selenium pytest pytest-html
+    - name: Test with pytest
+      run: |
+        pytest
