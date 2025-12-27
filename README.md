@@ -10,7 +10,8 @@ This repository contains a professional Selenium-based automation suite for the 
 
 2.**Run the Test:**
 Execute the following command to run the suite and generate an HTML report:
-  pytest
+    pytest
+
 
 ## Architecture (Page Object Model)
 ​I implemented a strict Page Object Model (POM) to separate the test logic from the technical implementation details.
