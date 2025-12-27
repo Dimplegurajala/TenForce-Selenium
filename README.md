@@ -1,82 +1,41 @@
-<<<<<<< HEAD
-# TenForce Automation Project
-
-## This repository contains a Selenium-based automation suite for the TenForce Career page navigation.
-
-##  How to Run
-1. **Install requirements:** `pip install -r requirements.txt`
-2. **Execute tests:** `pytest`
-3. **View Results:** An HTML report will be generated in the `reports/` folder. 
-
-##  Architecture (POM)
-I implemented the **Page Object Model (POM)** to keep the test steps separate from the website's technical details.
-* **BasePage:** The "engine" that handles scrolling and smart-clicking.
-* **CareerPage:** The "map" containing the specific TenForce locators.
-
-
-
-##  Why I made these choices
-
-### Solving the "Sticky Header"
-TenForce has a menu that stays at the top of the screen. Standard clicks often failed because the menu "blocked" the buttons. I solved this by creating a **Scroll-to-Center** function. This uses JavaScript to move the element to the middle of the screen before clicking, so the header never gets in the way.
-
-### Robust Locators
-Instead of using fragile XPaths like `/div/div/h3`, I used **Text-Based Locators** with `normalize-space()`. This ensures the test is "smart" enough to find the "Life of two interns" article even if the website's code changes slightly. 
-
-### Meaningful Assertions
-I didn't just check if the page loaded; I verified the specific text node for the CV submission instructions. This proves the Career section is actually working, not just visible. 
-=======
-
 # TenForce QA Automation Project
 
-This project automates a specific user journey on the TenForce Career page using **Python and Selenium**. [cite_start]It follows the **Page Object Model (POM)** to ensure the code is clean and easy to update[cite: 10].
+This repository contains a professional Selenium-based automation suite for the TenForce Career page user journey. The project is designed to be resilient, scalable, and easy to maintain.
 
-##  How to Run the Test
+# How to Run the Test
 
 1. **Install Dependencies:**
    ```bash
    pip install -r requirements.txt
-Run the Test: Execute the following command to run the test and generate an HTML report:
 
-Bash
+2.**Run the Test:**
+Execute the following command to run the suite and generate an HTML report:
+  pytest
 
-pytest
-The report will be saved in the reports/ folder.
+## Architecture (Page Object Model)
+​I implemented a strict Page Object Model (POM) to separate the test logic from the technical implementation details.
 
-🏗️ Architecture Explanation
-I used the Page Object Model (POM) to separate the "What" (the test steps) from the "How" (the technical locators).
+​## BasePage: Acts as the framework engine, containing generic, reusable actions like smart-clicking and specialized scrolling.
 
+##​ CareerPage: Serves as the object "map," holding the specific XPaths and business logic for the TenForce website.
+​This separation ensures that if the website UI changes, updates are only required in the Page Object, keeping the test scripts clean and readable.
 
-BasePage: Contains generic actions like clicking and scrolling.
+​## Engineering Decisions (The "Why")
 
+​1. Solving the "Sticky Header" Interference
+​The TenForce website uses a floating navigation menu that stays at the top of the screen. Standard Selenium click() actions often failed because the menu physically "covered" the target elements.
 
-CareerPage: Holds the specific XPaths and logic for TenForce.
+​Solution: I implemented a JavaScript-based Scroll-to-Center function. This ensures the element is moved to the vertical center of the viewport before any interaction, guaranteeing the header never blocks the click.
 
+​2. Robust & Resilient Locators
+​To avoid "brittle" tests that break with minor UI changes, I avoided long, absolute XPaths (e.g., /div/div/h3).
 
-This separation means if TenForce changes their website design, we only need to update one file (career_page.py) rather than fixing every single test.
+​Solution: I utilized Text-Based Locators combined with normalize-space(). This makes the suite "smart" enough to find elements like the "Life of two interns" article even if the underlying HTML structure changes slightly.
 
+​3. Meaningful Assertions
+​I chose not to rely on simple URL checks, which can provide "false positives."
 
-## Engineering Decisions (Why I did what I did)
-1. Solving the "Sticky Header" Problem
-The TenForce website has a menu bar that stays at the top. Standard Selenium clicks often failed because the menu was "covering" the buttons. I solved this by creating a Scroll-to-Center function. This uses JavaScript to move the element to the middle of the screen before clicking, making sure the header never gets in the way.
+​Solution: The suite performs a deep validation by looking for the specific CV submission text node. This confirms that the Job Openings section is not just visible, but fully functional and displaying the correct contact data.
 
-2. Robust Locators (No Brittle XPaths)
-Instead of using long, fragile XPaths like /div/div/h3, I used Text-Based Locators with normalize-space(). This makes the test "smart" enough to find the "Life of two interns" article even if the website developers change the layout slightly.
-
-3. Meaningful Assertions
-I didn't just check if the page loaded. The test specifically looks for the CV submission text ("Feel free to send your CV to") to confirm that the Job Openings section is fully functional.
-
-
-4. Deterministic Navigation
-Instead of relying on the browser's "Back" button (which can be unreliable), I used Direct URL Navigation to return to the career page. This ensures the test always starts the final assertion from a clean, known state.
-
-
-
----
-
-### Final Push Instructions
-1. Initialize your git repo: `git init`
-2. Add your files: `git add .`
-3. Commit: `git commit -m "Initial commit - TenForce Automation Suite"`
-4. Push to your GitHub/GitLab link.
->>>>>>> feature/tenforce-automation-article
+​4. CI/CD Integration
+​The project is fully integrated with GitHub Actions. Every push to the repository triggers an automated run in a headless Linux environment, ensuring the code is "Green" and production-ready at all times.
