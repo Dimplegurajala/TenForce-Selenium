@@ -37,6 +37,10 @@ BasePage Engine: Contains resilient interaction logic, such as a JavaScript-base
 
 Robust Locators: Utilized text-based locators with normalize-space() to ensure tests remain stable even if the underlying HTML structure changes.
 
+Functional Assertions: "I implemented Status Code assertions to verify service availability and JSON payload validation to ensure the response body matches the technical specifications."
+
+Negative Testing: "I included a test case for invalid routes to confirm the server correctly returns a 404 Not Found status, ensuring robust error handling."
+
 ### 2. Service Layer (Hermetic Mocks)
 To ensure the CI/CD pipeline is not dependent on the external uptime of tenforce.com, I developed a Flask Mock Server.
 

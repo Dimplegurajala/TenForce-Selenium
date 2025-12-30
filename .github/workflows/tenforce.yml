@@ -39,7 +39,7 @@ jobs:
 
       - name: Execute UI Suite (Selenium)
         # Saves the report into the ignored reports/ folder
-        run: pytest tests/test_tenforce.py --html=reports/selenium_report.html --self-contained-html -s
+        run: pytest tests/test_tenforce.py tests/test_api.py --html=reports/selenium_report.html --self-contained-html -s
         env:
           PYTHONPATH: .
           CI: "true"
