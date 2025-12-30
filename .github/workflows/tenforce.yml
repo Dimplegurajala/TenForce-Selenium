@@ -1,24 +1,60 @@
-name: Python application
-on: [push]
+name: TenForce - Selenium
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: # Allows manual triggering from the UI
+
 jobs:
-  build:
+  automation-suite:
     runs-on: ubuntu-latest
+    
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-    - name: Install dependencies
-      run: |
-        pip install selenium pytest pytest-html
-    - name: Test with pytest
-      run: |
-        pytest --html=report.html --self-contained-html
-    - name: Upload Test Report
-      if: always() 
-      uses: actions/upload-artifact@v4
-      with:
-        name: pytest-sprint-report-${{ github.run_number }} # Added run number for uniqueness
-        path: report.html
-        retention-days: 15  # Keeps the report for the full duration of a 2-week sprint
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip' # Speeds up future runs
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          # Ensure these are in requirements: selenium, pytest, pytest-html, flask, locust, waitress
+
+      - name: Create Artifact Structure
+        # Creates a hidden space for results so the root stays 100% Python
+        run: mkdir -p reports/screenshots logs
+
+      - name: Start Service Layer (Mock Server)
+        run: |
+          # Start server in background using '&'
+          python mocks/mock_server.py & 
+          # Dynamic wait: ensures the server is UP before tests start
+          timeout 30s bash -c 'until curl -s http://127.0.0.1:5000/api/careers; do sleep 2; done'
+
+      - name: Execute UI Suite (Selenium)
+        # Saves the report into the ignored reports/ folder
+        run: pytest tests/test_tenforce.py --html=reports/selenium_report.html --self-contained-html -s
+        env:
+          PYTHONPATH: .
+          CI: "true"
+
+      - name: Execute Performance Layer (Locust)
+        run: |
+          locust -f performance/locustfile.py \
+          --headless -u 5 -r 1 -t 20s \
+          --host http://127.0.0.1:5000 \
+          --html reports/performance_report.html
+
+      - name: Archive All Test Artifacts
+        if: always() # Upload if tests fail so you can see why
+        uses: actions/upload-artifact@v4
+        with:
+          name: tenforce-execution-artifacts
+          path: reports/
+          retention-days: 15
