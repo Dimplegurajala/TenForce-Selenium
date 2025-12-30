@@ -14,7 +14,7 @@ jobs:
         pip install selenium pytest pytest-html
     - name: Test with pytest
       run: |
-        pytest
+        pytest --html=report.html --self-contained-html
     - name: Upload Test Report
       if: always() 
       uses: actions/upload-artifact@v4
