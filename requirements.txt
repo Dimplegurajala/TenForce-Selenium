@@ -3,5 +3,6 @@ pytest-html
 selenium
 webdriver-manager
 requests
+jsonschema
 locust
 Flask

@@ -24,7 +24,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
-          # Ensure these are in requirements: selenium, pytest, pytest-html, flask, locust, waitress
+          # Ensure these are in requirements: selenium, pytest, pytest-html, flask, locust, selenium jsonschema, waitress
 
       - name: Create Artifact Structure
         # Creates a hidden space for results so the root stays 100% Python
