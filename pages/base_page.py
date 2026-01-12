@@ -19,14 +19,6 @@ class BasePage:
         element = self.wait.until(EC.element_to_be_clickable(locator))
         element.click()
 
-    def scroll_to_bottom(self):
-        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-    def get_text(self, locator):
-        element = self.find(locator)
-        self.scroll(element)
-        return element.text.strip()
-
     def hover_and_click(self, hover_locator, click_locator):
         try:
             hover_el = self.find(hover_locator)
@@ -50,5 +42,13 @@ class BasePage:
     def _js_click(self, locator):
         element = self.find(locator)
         self.driver.execute_script("arguments[0].click();", element)
+
+    def scroll_to_bottom(self):
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+    def get_text(self, locator):
+        element = self.find(locator)
+        self.scroll(element)
+        return element.text.strip()
 
     
