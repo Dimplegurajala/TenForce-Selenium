@@ -2,7 +2,6 @@ import pytest
 from pages.career_page import CareerPage
 
 def test_tenforce_navigation(driver):
-    print("\n--- STARTING TEST ---")
     navigation = CareerPage(driver)
     
     # 1. Open Tenforce Homepage

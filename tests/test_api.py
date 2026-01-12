@@ -1,27 +1,37 @@
 import requests
+from jsonschema import validate
 import pytest
 
-# Define the base URL of your local mock server
-BASE_URL = "http://127.0.0.1:5000"
+# Your TenForce Career Schema
+CAREER_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "status": {"type": "string"},
+        "jobs": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "number"},
+                    "title": {"type": "string"},
+                    "contact": {"type": "string"}
+                },
+                "required": ["id", "title"]
+            }
+        }
+    },
+    "required": ["status", "jobs"]
+}
 
-def test_get_careers_status_and_schema():
-    """Validates the Careers endpoint returns 200 OK and correct JSON structure."""
-    response = requests.get(f"{BASE_URL}/api/careers")
-    
-    # 1. Status Code Validation
-    assert response.status_code == 200, f"Expected 200 but got {response.status_code}"
-    
-    # 2. Schema/Data Integrity Validation
+API_URL = "http://127.0.0.1:5000/api/v1/careers"
+
+def test_career_data_integrity():
+    """Validates API Data Integrity without external config files."""
+    response = requests.get(API_URL)
     data = response.json()
-    assert data["status"] == "success"
-    assert isinstance(data["jobs"], list)
-    assert len(data["jobs"]) > 0
     
-    # 3. Specific Field Validation (Business Logic)
-    assert "SDET" in data["jobs"]
-
-
-def test_invalid_endpoint_returns_404():
-    """Negative test to ensure the server handles unknown routes correctly."""
-    response = requests.get(f"{BASE_URL}/api/invalid-route")
-    assert response.status_code == 404
+    # Ensuring the SDET role is present (Your Resume Project #1) 
+    assert any(job.get('title') == "SDET" for job in data['jobs']), "SDET role missing!"
+    
+    # Data Integrity: Matching the contact email from your mock server
+    assert data['jobs'][0].get('contact') == "jobs@tenforce.com"

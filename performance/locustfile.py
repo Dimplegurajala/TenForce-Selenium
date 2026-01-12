@@ -1,8 +1,15 @@
 from locust import HttpUser, task, between
 
-class TenForceApiUser(HttpUser):
-    wait_time = between(1, 2) # Simulating human-like pauses with 1 to 2 sec pacing
+class TenForceLoadTester(HttpUser):
+    wait_time = between(1, 2)
 
     @task
-    def check_careers_api(self):
-        self.client.get("/api/careers", name="Get Careers List")
+    def check_api_reliability(self):
+        with self.client.get("/api/v1/careers", catch_response=True) as response:
+            if response.status_code == 200:
+                data = response.json()
+                # Integrity Check: Ensure load doesn't cause data truncation 
+                if not data.get("jobs"):
+                    response.failure("Data Integrity Failure: 'jobs' array is empty under load")
+            else:
+                response.failure(f"System Degradation: Status {response.status_code}")
