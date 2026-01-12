@@ -20,6 +20,7 @@ class CareerPage(BasePage):
         self.hover_and_click(self.ABOUT_US_MENU, self.CAREER_LINK)
 
     def navigating_to_life_at_tenforce(self):
+        self.wait.until(EC.url_contains("/career"))
         self.scroll_and_click(self.LIFE_AT_TENFORCE_TAB)
         self.wait.until(EC.visibility_of_element_located(self.INTERN_ARTICLE))
 
